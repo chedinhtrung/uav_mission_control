@@ -1,0 +1,89 @@
+<html>
+  <head>
+    <title>Add Map</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+
+    
+  </head>
+  <body>
+<div><button type="button" id="center" style="background: none rgb(255, 255, 255); margin: 10px; padding: 10px; z-index:100; position: absolute; cursor: pointer; border-radius: 2px; box-shadow: rgba(0, 0, 0, 0.3) 0px 1px 4px -1px; top: 55px; left: 6px;" onclick="centerRover()"> Center<br> Rover</button></div>
+<div><button type="button" id="follow" style="background: none rgb(255, 255, 255); margin: 10px; padding: 10px; z-index:100; position: absolute; cursor: pointer; border-radius: 2px; box-shadow: rgba(0, 0, 0, 0.3) 0px 1px 4px -1px; top: 55px; left: 80px;" onclick="set_follow()"> Follow<br> Rover</button></div>
+    <!--The div element for the map -->
+    <div id="map" style="height:100%; width:100%"></div>
+
+    <!-- 
+      The `defer` attribute causes the callback to execute after the full HTML
+      document has been parsed. For non-blocking uses, avoiding race conditions,
+      and consistent behavior across browsers, consider loading using Promises
+      with https://www.npmjs.com/package/@googlemaps/js-api-loader.
+      -->
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key={{API_KEY}}&language=en"
+      
+    ></script>
+<script>
+
+var map;
+var current_pos = {lat: 0, lng: 0};
+var current_marker = new google.maps.Marker();
+var traces = [];
+
+var follow = false;
+let streetview;
+
+function initMap() {
+  const eu = { lat: 50.0, lng: 10 };
+  map = new google.maps.Map(document.getElementById("map"), {
+    zoom: 5,
+    center: eu,
+  });
+  streetview = map.getStreetView();
+}
+
+function update_location(lng, lat) {
+    current_pos = {lat: lat, lng: lng};
+    current_marker.setMap(null);
+    let marker = new google.maps.Marker({
+    position: current_pos,
+    map: map,
+    icon: 'Resources/pos.png',
+  });
+    current_marker = marker;
+    let icon = {
+    url:'Resources/trace.png',
+    anchor: new google.maps.Point(5, 2),
+    }
+    let trace = new google.maps.Marker({
+    position: current_pos,
+    map: map,
+    icon: icon,
+  });
+    if (follow){
+      map.panTo(current_pos);
+    }
+}
+
+function set_follow(){
+  if (follow){
+    follow = false;
+    let button = document.getElementById("follow");
+    button.style.backgroundColor = "white";
+  } else {
+    follow = true;
+    let button = document.getElementById("follow");
+    button.style.backgroundColor = "green";
+    centerRover();
+  }
+}
+
+function centerRover (){
+map.panTo(current_pos);
+map.setZoom(19);
+}
+
+initMap();
+
+window.initMap = initMap;
+</script>
+  </body>
+</html>

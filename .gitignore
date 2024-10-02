@@ -1,0 +1,6 @@
+__pycache__/
+Recordings/
+Raw_Data/
+venv/
+ffmpeg.exe
+secret.py
