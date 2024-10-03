@@ -43,9 +43,9 @@ class LocalTcpGateway:
                 print("New connection. Shut down old one on side A")
             except:
                 pass
-            self.client = None
             self.client = client
-            self.client.settimeout(1)
+            if self.client is not None:
+                self.client.settimeout(2)
             print(f"Rover: {ip}")
     
     def recv_loop(self):
