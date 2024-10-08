@@ -32,7 +32,7 @@ class Decoder:
         self.active = True
         ffmpeg_cmd = ['./ffmpeg.exe',
         #'-err_detect', 'ignore_err', 
-        #'-avioflags', 'direct',
+        '-avioflags', 'direct',
         '-analyzeduration','0', 
         '-probesize', '32',
         '-flags', 'low_delay',

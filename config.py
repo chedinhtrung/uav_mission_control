@@ -20,8 +20,8 @@ local_gateway = {
 }
 
 video = {
-    "height":720,
-    "width":1280,
+    "height":480,
+    "width":720,
     "framerate": 24
 }
 
