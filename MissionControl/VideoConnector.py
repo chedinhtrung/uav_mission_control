@@ -30,13 +30,13 @@ class Decoder:
         self.decode_inthread = Thread(target=self.decode_inloop)
         self.decode_outthread = Thread(target=self.decode_outloop)
         self.active = True
-        ffmpeg_cmd = ['./ffmpeg.exe',
+        ffmpeg_cmd = ['ffmpeg',
         #'-err_detect', 'ignore_err', 
         '-avioflags', 'direct',
         '-analyzeduration','0', 
         '-probesize', '32',
         '-flags', 'low_delay',
-        '-hwaccel', 'd3d11va',
+        '-hwaccel', 'cuda',
         '-fflags', 'nobuffer', 
         '-i', '-',
         '-c:v', 'rawvideo',

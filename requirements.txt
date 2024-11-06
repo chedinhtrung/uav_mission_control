@@ -1,0 +1,9 @@
+PyQt5
+PyQtWebEngine
+opencv-python
+numpy
+pygame
+psutil
+QCustomPlot-PyQt5
+pyte 
+paramiko

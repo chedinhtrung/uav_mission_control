@@ -234,13 +234,13 @@ class ToolsMenu(QMenu):
 
 class MenuBar(QMenuBar):
     configurator = None
-    def __init__(self, parent):
+    def __init__(self, parent, scale=1):
         QMenuBar.__init__(self)
         self.parent = parent
         self.tools = self.addMenu(ToolsMenu("Tools", self.parent))
         self.config = self.addMenu("Config")
         self.view = self.addMenu("View")
-        self.setFixedHeight(60)
+        self.setFixedHeight(int(60*scale))
         self.setStyleSheet("""
             QMenuBar {
                 background-color: #181818;
@@ -280,7 +280,7 @@ class MenuBar(QMenuBar):
         dialog.exec_()
 
 class TopBar(QWidget):
-    def __init__(self, parent):
+    def __init__(self, parent, scale=1):
         super().__init__(parent)
         self.parent = parent
         self.setObjectName("TopBar")
@@ -288,9 +288,9 @@ class TopBar(QWidget):
         layout = QHBoxLayout()
         layout.setSpacing(0)
         layout.setContentsMargins(1, 1, 1, 1)
-        layout.addWidget(MenuBar(self.parent), 1)
+        layout.addWidget(MenuBar(self.parent, scale), 1)
         minimize = QPushButton()
-        minimize.setFixedSize(90,60)
+        minimize.setFixedSize(int(90*scale),int(60*scale))
         minimize.setText("__")
         minimize.setStyleSheet("QPushButton:hover {background-color: #595958;} QPushButton{font-weight:bold}")
         minimize.clicked.connect(self.parent.minimizeWindow)
@@ -299,12 +299,12 @@ class TopBar(QWidget):
         close_button.setIcon(QIcon(os.path.join(os.path.dirname(os.path.abspath(__file__)), "Resources/close.png")))
         close_button.setStyleSheet("QPushButton {background-color:darkred; padding:10px} QPushButton:hover {background-color: red;}")
         icon_size = close_button.iconSize()
-        icon_size.setWidth(20)  
-        icon_size.setHeight(20)  
+        icon_size.setWidth(int(20*scale))  
+        icon_size.setHeight(int(20*scale))  
         close_button.setIconSize(icon_size)
         close_button.clicked.connect(self.parent.close)
         layout.addWidget(close_button, 1)
-        close_button.setFixedSize(90,60)
+        close_button.setFixedSize(int(90*scale),int(60*scale))
         self.setLayout(layout)
     
     def paintEvent(self, pe):
@@ -314,15 +314,16 @@ class TopBar(QWidget):
         self.style().drawPrimitive(QStyle.PE_Widget, o, p, self)
 
 class NetworkStatusBar(QWidget):
-    def __init__(self):
+    def __init__(self, scale=1):
         QWidget.__init__(self)
+        self.scale=scale
         self.image_path = os.path.join(os.path.dirname(__file__), "Resources/signal_0.png")
         layout = QHBoxLayout()
         self.signal_label = QLabel()
-        self.signal_label.setFixedHeight(25)
-        self.signal_label.setFixedWidth(35)
+        self.signal_label.setFixedHeight(int(25*scale))
+        self.signal_label.setFixedWidth(int(35*scale))
         #self.signal_label.setMargin(5)
-        self.signal_img = QPixmap(self.image_path).scaled(30, 30, aspectRatioMode=True)
+        self.signal_img = QPixmap(self.image_path).scaled(int(30*scale), int(30*scale), aspectRatioMode=True)
         self.signal_label.setPixmap(self.signal_img)
         self.phonenumber = QLabel("--")
         self.network_mode = QLabel("--")
@@ -333,7 +334,7 @@ class NetworkStatusBar(QWidget):
         layout.addWidget(self.phonenumber)
         layout.setSpacing(5)
         layout.setContentsMargins(15, 0, 0, 0) 
-        self.setFixedHeight(20) 
+        self.setFixedHeight(int(20*scale)) 
         self.setLayout(layout)
         self.last_update = time.time()
         #self.update({'GPS': False, 'Lon': 11.594022750854492, 'Lat': 48.126522064208984, 'Spd': 0, 'Ctl': False, 'Cam': 'Normal', 'Vol': 0.0, 'Rol': 2.8114070892333984, 'Ptc': -2.5679171085357666, 'Yaw': 201.6574249267578, 'Alt': -135.2073516845703, 'Err': [], 'Mea': False, 'Sig': {'sim_status': 'OK', 'mode': 'LTE', 'network_name': 'freenet FUNK', 'phone_number': '"+4917641639250"', 'signal_qual': '50'}, 'Online': True})
@@ -356,34 +357,34 @@ class NetworkStatusBar(QWidget):
 
             if quality < 25:
                 self.image_path = os.path.join(os.path.dirname(__file__), "Resources/signal_0.png")
-                self.signal_img = QPixmap(self.image_path).scaled(30, 30, aspectRatioMode=True)
+                self.signal_img = QPixmap(self.image_path).scaled(int(30*self.scale), int(30*self.scale), aspectRatioMode=True)
                 self.signal_label.setPixmap(self.signal_img)
             
             elif quality >= 25 and quality < 34:
                 self.image_path = os.path.join(os.path.dirname(__file__), "Resources/signal_1.png")
-                self.signal_img = QPixmap(self.image_path).scaled(30, 30, aspectRatioMode=True)
+                self.signal_img = QPixmap(self.image_path).scaled(int(30*self.scale), int(30*self.scale), aspectRatioMode=True)
                 self.signal_label.setPixmap(self.signal_img)
             
             elif quality >= 34 and quality < 43:
                 self.image_path = os.path.join(os.path.dirname(__file__), "Resources/signal_2.png")
-                self.signal_img = QPixmap(self.image_path).scaled(30, 30, aspectRatioMode=True)
+                self.signal_img = QPixmap(self.image_path).scaled(int(30*self.scale), int(30*self.scale), aspectRatioMode=True)
                 self.signal_label.setPixmap(self.signal_img)
             
             elif quality >= 43 and quality < 55:
                 self.image_path = os.path.join(os.path.dirname(__file__), "Resources/signal_3.png")
-                self.signal_img = QPixmap(self.image_path).scaled(30, 30, aspectRatioMode=True)
+                self.signal_img = QPixmap(self.image_path).scaled(int(30*self.scale), int(30*self.scale), aspectRatioMode=True)
                 self.signal_label.setPixmap(self.signal_img)
             
             elif quality >= 55:
                 self.image_path = os.path.join(os.path.dirname(__file__), "Resources/signal_4.png")
-                self.signal_img = QPixmap(self.image_path).scaled(30, 30, aspectRatioMode=True)
+                self.signal_img = QPixmap(self.image_path).scaled(int(30*self.scale), int(30*self.scale), aspectRatioMode=True)
                 self.signal_label.setPixmap(self.signal_img)
 
 class SidebarButton(QPushButton):
-    def __init__(self, icon:QIcon, window=None, manager=None):
+    def __init__(self, icon:QIcon, window=None, manager=None, scale=1):
         QPushButton.__init__(self, icon, None)
-        self.setFixedSize(90, 90)
-        icon_size = QSize(45, 45)
+        self.setFixedSize(int(90*scale), int(90*scale))
+        icon_size = QSize(int(45*scale), int(45*scale))
         self.setIconSize(icon_size)
         self.setStyleSheet("QPushButton:hover {background-color: gray;}")
         self.widget = None
@@ -421,33 +422,32 @@ class SidebarButton(QPushButton):
         self.setState(not self.selected)
 
 class SideBar(QFrame):
-    def __init__(self, parent=None):
+    def __init__(self, parent=None, scale=1):
         QFrame.__init__(self)
         self.p = parent
         layout = QVBoxLayout()
         layout.setContentsMargins(0,0,0,0)
         layout.setSpacing(0)
-
+        self.setFixedWidth(int(90*scale))
         self.setLayout(layout)
-        self.setFixedWidth(90)
         self.setStyleSheet("background-color: #181818")
 
         self.buttons = []
 
-        icon_size = QSize(45, 45)
-        self.loginbutton = SidebarButton(QIcon(os.path.join(os.path.dirname(os.path.abspath(__file__)), "Resources/login.png")), window=None, manager=self)
-        self.mapbutton = SidebarButton(QIcon(os.path.join(os.path.dirname(os.path.abspath(__file__)), "Resources/map.png")), window=None, manager=self)
+        icon_size = QSize(int(45*scale), int(45*scale))
+        self.loginbutton = SidebarButton(QIcon(os.path.join(os.path.dirname(os.path.abspath(__file__)), "Resources/login.png")), window=None, manager=self, scale=scale)
+        self.mapbutton = SidebarButton(QIcon(os.path.join(os.path.dirname(os.path.abspath(__file__)), "Resources/map.png")), window=None, manager=self, scale=scale)
         self.mapbutton.setTarget(self.p.flightindicator.topslot, self.p.flightindicator.mapdisplay)
-        self.offbutton = SidebarButton(QIcon(os.path.join(os.path.dirname(os.path.abspath(__file__)), "Resources/power.png")), window=None, manager=self)
+        self.offbutton = SidebarButton(QIcon(os.path.join(os.path.dirname(os.path.abspath(__file__)), "Resources/power.png")), window=None, manager=self, scale=scale)
         self.offbutton.setStyleSheet("QPushButton {background-color:darkred; padding:10px} QPushButton:hover {background-color: red;}")
-        self.photobutton = SidebarButton(QIcon(os.path.join(os.path.dirname(os.path.abspath(__file__)), "Resources/photo.png")))
+        self.photobutton = SidebarButton(QIcon(os.path.join(os.path.dirname(os.path.abspath(__file__)), "Resources/photo.png")), scale=scale)
         self.photobutton.clicked.connect(self.toggle_recording)
-        self.logbutton = SidebarButton(QIcon(os.path.join(os.path.dirname(os.path.abspath(__file__)), "Resources/log.png")), window=None, manager=self)
+        self.logbutton = SidebarButton(QIcon(os.path.join(os.path.dirname(os.path.abspath(__file__)), "Resources/log.png")), window=None, manager=self, scale=scale)
         self.logbutton.setTarget(self.p.flightindicator.topslot, self.p.flightindicator.logdisplay)
-        self.controllerbutton = SidebarButton(QIcon(os.path.join(os.path.dirname(os.path.abspath(__file__)), "Resources/controller.png")), window=None, manager=self)
+        self.controllerbutton = SidebarButton(QIcon(os.path.join(os.path.dirname(os.path.abspath(__file__)), "Resources/controller.png")), window=None, manager=self, scale=scale)
         self.controllerbutton.setTarget(self.p.flightindicator.topslot, self.p.flightindicator.logdisplay)
-        self.launchbutton = SidebarButton(QIcon(os.path.join(os.path.dirname(os.path.abspath(__file__)), "Resources/launch.png")), window=None, manager=self)
-        self.sosbutton = SidebarButton(QIcon(os.path.join(os.path.dirname(os.path.abspath(__file__)), "Resources/sos.png")), window=None, manager=self)
+        self.launchbutton = SidebarButton(QIcon(os.path.join(os.path.dirname(os.path.abspath(__file__)), "Resources/launch.png")), window=None, manager=self, scale=scale)
+        self.sosbutton = SidebarButton(QIcon(os.path.join(os.path.dirname(os.path.abspath(__file__)), "Resources/sos.png")), window=None, manager=self, scale=scale)
 
         layout.addWidget(self.loginbutton)
         layout.addWidget(self.mapbutton)
@@ -455,7 +455,7 @@ class SideBar(QFrame):
         layout.addWidget(self.logbutton)
         layout.addWidget(self.controllerbutton)
         layout.addWidget(self.launchbutton)
-        layout.addItem(QSpacerItem(20, 40, QSizePolicy.Expanding, QSizePolicy.Expanding))
+        layout.addItem(QSpacerItem(int(20*scale), int(40*scale), QSizePolicy.Expanding, QSizePolicy.Expanding))
         layout.addWidget(self.sosbutton)
         layout.addWidget(self.offbutton)   
 
@@ -473,7 +473,7 @@ class SideBar(QFrame):
                 btn.setState(False)
 
 class FlightIndicatorBar(QFrame):
-    def __init__(self):
+    def __init__(self, scale=1):
         QFrame.__init__(self)
         layout = QVBoxLayout()
         #layout.setVerticalSpacing(5)
@@ -492,7 +492,7 @@ class FlightIndicatorBar(QFrame):
         layout.addLayout(self.topslot)
         layout.addLayout(self.bottomslot)
         self.setLayout(layout)
-        self.setFixedWidth(800)
+        self.setFixedWidth(int(800*scale))
     
     def set_backend(self, backend):
         backend.signal_telemetry.connect(self.update_data)
@@ -513,12 +513,12 @@ class FlightIndicatorBar(QFrame):
 
 
 class MainTab(QWidget):
-    def __init__(self, parent=None):
+    def __init__(self, parent=None, scale=1):
         super().__init__()
         self.parent = parent
         self.setStyleSheet("background-color: #1F1F1F;")
         layout = QVBoxLayout()
-        self.networkstatusbar = NetworkStatusBar()
+        self.networkstatusbar = NetworkStatusBar(scale)
         layout.addWidget(self.networkstatusbar)
         wrapper = QWidget()
         wrapperlayout = QVBoxLayout()
@@ -563,6 +563,7 @@ class Window(QWidget):
     
     def init_UI(self):
         self.setStyleSheet("background-color: #1F1F1F; margin:0px; padding:0px;")
+        self.scale = 0.5 #TODO: dynamically configure scale based on screen size
         window = QVBoxLayout()
         window.setSpacing(0)
         window.setContentsMargins(0, 0, 0, 0)
@@ -581,11 +582,11 @@ class Window(QWidget):
         #self.logdisplay.setVisible(False)
         #self.logdisplay.move(60,40)
 
-        topbar = TopBar(self)
+        topbar = TopBar(self, scale=self.scale)
         window.addWidget(topbar)
-        self.flightindicator = FlightIndicatorBar()
+        self.flightindicator = FlightIndicatorBar(scale=self.scale)
         row1 = QHBoxLayout()
-        self.sidebar = SideBar(parent=self)
+        self.sidebar = SideBar(parent=self, scale=self.scale)
         row1.addWidget(self.sidebar)
 
         row1.addWidget(self.flightindicator)
@@ -627,6 +628,7 @@ class Window(QWidget):
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
+    global_scale = 0.5
     app.setStyleSheet("QLabel { color : #CCCCBB; font-size:20px; } QPushButton { color : #CCCCBB; } \
                       QTextEdit{color : #CCCCBB;} QDialog {background-color: #37373D;} \
                       QTabWidget::pane { background-color: #1F1F1F; } QTabBar { font-size: 27px;  background: white;} \
