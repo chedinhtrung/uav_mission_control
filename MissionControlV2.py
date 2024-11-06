@@ -20,7 +20,7 @@ from MissionControl.Tools.network.NetworkGrapher import NetworkGraphTab
 from MissionControl.Tools.qterminal.widget import QTerminalTab
 from MissionControl.FlightDisplay import QPrimaryFlightDisplay
 import uuid
-os.environ['QTWEBENGINE_CHROMIUM_FLAGS'] = '--disable-web-security'
+os.environ['QTWEBENGINE_CHROMIUM_FLAGS'] = '--disable-web-security' # Dirty fixing CORS error when running google maps
 
 class VideoDisplay(QLabel):
     def __init__(self, video_source=None):   
